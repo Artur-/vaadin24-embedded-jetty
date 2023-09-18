@@ -2,14 +2,16 @@ package com.example.application;
 
 import java.io.IOException;
 
+import com.vaadin.flow.component.page.Push;
+import org.eclipse.jetty.ee10.webapp.WebAppContext;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.VaadinServlet;
 import com.vaadin.flow.theme.Theme;
+import org.eclipse.jetty.util.resource.URLResourceFactory;
 
+@Push
 @Theme(value = "embedded-jetty")
 public class Application implements AppShellConfigurator {
 
@@ -25,7 +27,7 @@ public class Application implements AppShellConfigurator {
     // copied from: https://github.com/mvysny/vaadin-boot/tree/main/vaadin-boot
     private static WebAppContext createWebAppContext() throws IOException {
         final WebAppContext context = new WebAppContext();
-        context.setBaseResource(Resource.newResource("src/main/webapp"));
+        context.setBaseResource(new URLResourceFactory().newResource("src/main/webapp"));
         context.addServlet(VaadinServlet.class, "/*");
         // this will properly scan the classpath for all @WebListeners,
         // including the most important
@@ -35,7 +37,7 @@ public class Application implements AppShellConfigurator {
                 "org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
                 ".*\\.jar|.*/classes/.*");
         context.setConfigurationDiscovered(true);
-        context.getServletContext().setExtendedListenerTypes(true);
+//        context.getServletContext().setExtendedListenerTypes(true);
 
         return context;
     }
